@@ -462,9 +462,10 @@
         //    // do work here
         //    xt_wsr_ps(savedPS); // restore the state
         //}
-        #define xt_rsil(level) (__extension__({uint32_t state; __asm__ __volatile__("rsil %0," __STRINGIFY(level) : "=a" (state)); state;}))
-        #define xt_wsr_ps(state)  __asm__ __volatile__("wsr %0,ps; isync" :: "a" (state) : "memory")
-
+		#ifndef xt_rsil
+        	#define xt_rsil(level) (__extension__({uint32_t state; __asm__ __volatile__("rsil %0," __STRINGIFY(level) : "=a" (state)); state;}))
+        	#define xt_wsr_ps(state)  __asm__ __volatile__("wsr %0,ps; isync" :: "a" (state) : "memory")
+		#endif
         // Set Interrupt Level
         // level (0-15),
         // level 15 will disable ALL interrupts,
@@ -589,7 +590,10 @@
 		struct AtomicIf< true, _AtomicMode >{ typedef AtomicBlock< _AtomicMode > AType; };	
 		
         
-   struct UnsafeBlock {};
+   struct UnsafeBlock 
+   {
+		~UnsafeBlock(){};
+   };
        
 #endif
 	
