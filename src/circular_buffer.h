@@ -16,18 +16,11 @@ template<
         >
 class CircularBuffer
 {
-    T arr_[N];
-    T* head_;
-    T* tail_;
-    unsigned count_;
+    T arr_[N];          ///< Elements
+    T* head_;           ///< Points at next place to store
+    T* tail_;           ///< Points last valid element
+    unsigned count_;    ///< Number of stored
 
-    T* advance( T* p) 
-    {
-        ++p;
-        if(p==arr_ + N)
-            return arr_;
-        return p;
-    }
 
     //----------------------------------------
     inline bool _isEmpty() const
@@ -47,6 +40,30 @@ public:
         head_ = arr_;
         tail_ = arr_;
         count_ = 0;
+    }
+    //----------------------------------------
+    /// @brief Advance a pointer to next
+    /// @param p 
+    /// @return 
+    T* advance( T* p) 
+    {
+        ++p;
+        if(p==arr_ + N)
+            return arr_;
+        return p;
+    }
+    //----------------------------------------
+    /// Same as advance()
+    T* next( T* p) { return advance(p); }
+    //----------------------------------------
+    /// @brief Back up  a pointer to prev
+    /// @param p 
+    /// @return 
+    T* prev( T* p) 
+    {
+        if(p==arr_)
+            return arr_+ N-1;
+        return --p;
     }
     //----------------------------------------
     bool isEmpty() const
